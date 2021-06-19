@@ -1,0 +1,411 @@
+\documentclass[11pt]{article} 
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage[siunitx]{circuitikz}
+\usepackage{tikz}
+\usepackage{tkz-berge}
+\usetikzlibrary{positioning, automata, backgrounds}
+\usepackage[colorinlistoftodos, color=orange!50]{todonotes}
+\usepackage{hyperref}
+\usepackage[numbers, square]{natbib}
+\usepackage{fancybox}
+\usepackage{epsfig}
+\usepackage{soul}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[shortlabels]{enumitem}
+\usepackage[version=4]{mhchem}
+\usepackage{multicol}
+\usepackage{forest}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[numbers]{natbib}
+\usepackage{subfiles}
+\usepackage{tkz-berge}
+
+
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{cor}{Corollary}[prop]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{definition}
+\newtheorem{required}{Problem}
+
+\theoremstyle{definition}
+\newtheorem{ex}{Example}
+
+\newcommand{\interval}[4]{\draw (#2, #1) -- (#3, #1); % Usage: \interval{height}{start}{end}{label}
+\draw (#2, #1-0.11) -- (#2, #1+0.11); % draw left whisker
+\draw (#3, #1-0.11) -- (#3, #1+0.11); % draw right whisker
+\node[] at (#2-0.25, #1) {#4};
+}
+
+
+\setlength{\marginparwidth}{3.4cm}
+%#########################################################
+
+%To use symbols for footnotes
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+%To change footnotes back to numbers uncomment the following line
+%\renewcommand*{\thefootnote}{\arabic{footnote}}
+
+% Enable this command to adjust line spacing for inline math equations.
+% \everymath{\displaystyle}
+
+% _______ _____ _______ _      ______ 
+%|__   __|_   _|__   __| |    |  ____|
+%   | |    | |    | |  | |    | |__   
+%   | |    | |    | |  | |    |  __|  
+%   | |   _| |_   | |  | |____| |____ 
+%   |_|  |_____|  |_|  |______|______|
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{
+\normalfont \normalsize 
+\textsc{CSCI 3104 Summer 2021 \\ 
+Instructor: Michael Levet} \\
+[10pt] 
+\rule{\linewidth}{0.5pt} \\[6pt] 
+\huge Problem Set 5 \\
+\rule{\linewidth}{2pt}  \\[10pt]
+}
+%\author{Brian E. Peterson}
+\date{06.18.21}
+
+\begin{document}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%Brian E. Peterson%%%%%%%
+%%%%%%%%%%109067890%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent
+Due Date \dotfill 06.18.21 \\
+Name \dotfill \textbf{Brian E. Peterson} \\
+Student ID \dotfill \textbf{109067890} \\
+Collaborators \dotfill \textbf{N/A}
+
+\tableofcontents
+
+\section{Instructions}
+ \begin{itemize}
+	\item The solutions \textbf{must be typed}, using proper mathematical notation. We cannot accept hand-written solutions. \href{http://ece.uprm.edu/~caceros/latex/introduction.pdf}{Here's a short intro to \LaTeX.}
+	\item You should submit your work through the \textbf{class Canvas page} only. Please submit one PDF file, compiled using this \LaTeX \ template.
+	\item You may not need a full page for your solutions; pagebreaks are there to help Gradescope automatically find where each problem is. Even if you do not attempt every problem, please submit this document with no fewer pages than the blank template (or Gradescope has issues with it).
+
+	\item You are welcome and encouraged to collaborate with your classmates, as well as consult outside resources. You must \textbf{cite your sources in this document.} \textbf{Copying from any source is an Honor Code violation. Furthermore, all submissions must be in your own words and reflect your understanding of the material.} If there is any confusion about this policy, it is your responsibility to clarify before the due date. 
+
+	\item Posting to \textbf{any} service including, but not limited to Chegg, Reddit, StackExchange, etc., for help on an assignment is a violation of the Honor Code.
+
+	\item You \textbf{must} virtually sign the Honor Code (see Section \ref{HonorCode}). Failure to do so will result in your assignment not being graded.
+\end{itemize}
+
+
+\section{Honor Code (Make Sure to Virtually Sign the Honor Pledge)} \label{HonorCode}
+
+\begin{required}
+On my honor, my submission reflects the following:
+\begin{itemize}
+\item My submission is in my own words and reflects my understanding of the material.
+\item Any collaborations and external sources have been clearly cited in this document.
+\item I have not posted to external services including, but not limited to Chegg, Reddit, StackExchange, etc.
+\item I have neither copied nor provided others solutions they can copy.
+\end{itemize}
+
+\noindent In the specified region below, clearly indicate that you have upheld the Honor Code. Then type your name. 
+\end{required}
+
+\begin{proof}[Honor Pledge]
+On my honor, my submission reflects the following:
+\begin{itemize}
+\item My submission is in my own words and reflects my understanding of the material.
+\item Any collaborations and external sources have been clearly cited in this document.
+\item I have not posted to external services including, but not limited to Chegg, Reddit, StackExchange, etc.
+\item I have neither copied nor provided others solutions they can copy.
+\end{itemize}
+- Brian E. Peterson
+\end{proof}
+
+
+\newpage
+\section{Standard 6- Safe and Useless Edges}
+
+\subsection{Problem \ref{Safe1}}
+\begin{required} \label{Safe1}
+Consider the following graph $G(V, E, w)$.
+\begin{center}
+\begin {tikzpicture}[semithick, node distance =2 cm and 3cm]
+\tikzstyle{blue}=[circle ,top color =white , bottom color = processblue!20 ,draw,processblue , text=blue , minimum width =1 cm];
+
+	\node[blue] (C) {$C$};
+	\node[blue] (B) [below left = of C] {$B$};
+	\node[blue] (A) [left = of B] {$A$};
+	\node[blue] (D) [below right = of C] {$D$};
+	\node[blue] (E) [below = of D] {$E$};
+	\node[blue] (H) [below = of B] {$H$};
+	\node[blue] (F) [right = of H] {$F$};
+
+
+	\path (C) edge node[above] {$8$} (A); 
+	\path (C) edge node[below] {$9$} (B);
+	\path (C) edge node[left] {$12$} (F);
+	\path (C) edge node[left]{$4$} (E);
+
+	\path (A) edge node[below] {$2$} (B);
+	\path (E) edge node[right] {$1$} (D);
+	\path (C) edge node[above] {$3$} (D);
+	\path (A) edge node[above] {$10$} (H);
+	\path (H) edge node[above] {$6$} (F);
+	\end{tikzpicture}  
+\end{center}
+
+\noindent Consider the intermediate spanning forest $\mathcal{F}$ that contains no edges of $G$. Clearly identify the safe, useless, and undecided edges. Justify your reasoning. [\textbf{Hint:} You may find Corollary 61 on page 42 of the typed lecture notes to be helpful.]
+\end{required}
+
+\begin{proof}[Answer]
+
+$(D, E)$ - safe; from either D or E, (D, E) is the minimum weight edge and these are single-vertex components so they have only one endpoint in their respective components
+
+$(A, B)$ - safe; from either A or B, (A, B) is the minimum weight edge and again these are single-vertex components 
+
+$(C, D)$ - safe; from either C or D, (C, D) is the minimum weight edge and has only one endpoint in its component
+
+$(C, E)$ - useless; from either C or E, (C, E) is not the minimum weight edge. After forming a tree between C, D, and E, (C, E) is useless because it would form a cycle. 
+
+$(F, H)$ - safe; from either F or H, (F, H) is the minimum weight edge and these are single-vertex components
+
+$(A, C)$ - safe; this is the minimum-weight edge connecting (B, A) and (C, D, E) components and has only one endpoint in either component 
+
+$(B, C)$ - useless; B and C already form a common component in (B, A, C, D, E) so (B, C) would create a cycle
+
+$(A, H)$ - safe; there are two edges connecting (B, A, C, D, E) and (F, H), but this is the minimum of the two and only contains one endpoint in each of the two components
+
+$(F, C)$ - useless; (F, H, A, B, C, D, E) are one component now so there's no reason to connect them. Doing so would create a cycle
+
+\end{proof}
+
+\newpage
+\subsection{Problem \ref{Safe2}}
+\begin{required} \label{Safe2}
+Consider the following graph $G(V, E, w)$. Suppose we have the intermediate spanning forest $\mathcal{F}$ (indicated using thick edges) consisting of the edges $\{A, B\}$ and $\{C, E\}$. Clearly identify the safe, useless, and undecided edges. Justify your reasoning. [\textbf{Hint:} You may find Corollary 61 on page 42 of the typed lecture notes to be helpful.]
+\begin{center}
+\begin {tikzpicture}[semithick]
+\tikzstyle{blue}=[circle ,top color =white , bottom color = processblue!20 ,draw,processblue , text=blue , minimum width =1 cm];
+\tikzstyle{red}=[circle ,top color =white , bottom color = processred!20 ,draw, processred , text=blue , minimum width =1 cm];
+\tikzstyle{green}=[circle ,top color =white , bottom color = processgreen!20 ,draw, processgreen , text=blue , minimum width =1 cm];
+
+	\node[blue] (A) {$A$};
+	\node[blue] (B) [above right = of A] {$B$};
+	\node[blue] (C) [below right = of A] {$C$};
+	\node[blue] (D) [right = of B] {$D$};
+	\node[blue] (E) [right = of C] {$E$};
+	\node[blue] (F) [below right = of D] {$F$};
+	
+	\draw[line width=3pt] (A) edge node[above] {$2$} (B);
+	\path (A) edge node[right] {$5$} (C);
+	\path (B) edge node[left] {$8$} (C);
+	\path (B) edge node[above] {$5$} (D);
+	\draw[line width=3pt] (C) edge node[above] {$4$} (E);
+	\path (E) edge node[right] {$2$} (D);
+	\path (D) edge node[above] {$7$} (F);
+	\path (E) edge node[below] {$5$} (F);
+	\end{tikzpicture}  
+\end{center}
+\end{required}
+
+
+\begin{proof}[Answer]
+$(D, E)$ - safe; this is the minimum weight edge connecting (C, E) and D, which are separate components
+
+$(A, C)$ - safe; (A, C) is the minimum weight edge connecting (A, B) and (C, E) and has only one endpoint in each component.
+
+$(E, F)$ - safe; this is the minimum weight edge connecting (C, E, D) to F, which are separate
+
+$(B, D)$ - useless; this would connect B to D, but B and D are already part of the component (B, A, C, E, F, D). This would create a cycle 
+
+\end{proof}
+
+
+
+\newpage
+\subsection{Problem \ref{Safe3}}
+\begin{required} \label{Safe3}
+Let $G(V, E, w)$ be a weighted graph, such that no two edges have the same weight. Let $C$ be a cycle of $G$, and let $e$ be the edge of $C$ that has the largest weight. Our goal is to show that $e$ does not belong to any minimum-weight spanning tree of $G$. The proof is outlined below. Your job is to justify each step.
+\begin{enumerate}[label=(\alph*)]
+\item Let $T$ be a spanning tree of $G$ that contains $e$. Show that removing $e$ disconnects $T$. That is, $T - e$ has two components. 
+
+\begin{proof}[Answer]
+
+Any spanning tree has $n-1$ edges. Removing any edge from T will therefore reduce this to $n-2$ edges, resulting in two components forming.
+
+\end{proof}
+
+
+\vskip 20pt
+\item Let $T_{1}$ and $T_{2}$ be the two components of $T - e$. Show that there is an edge $e^{\prime} \neq e$ that has one endpoint in $T_{1}$ and the other endpoint in $T_{2}$.
+
+\begin{proof}[Answer]
+
+There does exist a hypothetical edge, $e\prime$ that can connect $T_1$ and $T_2$ which is not $e$. This is because spanning trees are trees, i.e. have n-1 edges connecting each of, in this case, the n vertices in the cycle, $C$. That is, there is a break somewhere in the cycle, on one side of which the spanning tree starts, and the other on which it ends. Thus, there always exists one "opposite" neighbor one edge away from the break in the cycle. This is $e\prime$. 
+\end{proof}
+
+
+
+\vskip 20pt
+\item Conclude that replacing $e$ with $e^{\prime}$ in $T$ results in a spanning tree. That is $(T - e) \cup e^{\prime}$ is also a spanning tree.
+\begin{proof}[Answer]
+Removing $e$ will either widen this break in the cycle, or add a second one, depending on $e$'s placement with respect to the start and end of the spanning tree. Adding $e\prime$ will shift the break to where $e$ was before, i.e. there will again be $n-1$ edges, and since $T$ was previously a spanning tree, shifting this break will only create a different spanning tree. 
+\end{proof}
+
+
+
+\vskip 20pt
+\item Explain why $w( (T - e) \cup e^{\prime}) < w(T)$. Deduce that $e$ does not belong to any minimum-weight spanning tree of $G$.
+\begin{proof}[Answer]
+$e$ is the largest weighted edge in the graph, so replacing it with any other $e\prime$ will result in a lower total weight for the spanning tree.
+\end{proof}
+\end{enumerate}
+\end{required}
+
+
+
+\newpage
+\section{Standards 7-8: Kruskal's and Prim's Algorithms}
+
+\begin{required}
+This problem will be broken into two parts. Part (a) will count for Standard 7: Kruskal's Algorithm, while part (b) will count for Standard 8: Prim's Algorithm. \\
+
+\noindent The goal of this problem is to construct an example of a weighted graph $G(V, E, w)$ with distinct edge weights such that there exists a source vertex $s$, where Prim's algorithm (starting at $s$) adds the edges in a different order than Kruskal's algorithm. Note that as the edge weights are distinct, both algorithms will return the same minimum-weight spanning tree. The only difference is that the edges should be added in different orders. \\
+
+\noindent On the graph below, replace the $0$'s with your desired edge weights. \textbf{Do so here.}
+\begin{center}
+\begin {tikzpicture}[semithick]
+\tikzstyle{blue}=[circle ,top color =white , bottom color = processblue!20 ,draw,processblue , text=blue , minimum width =1 cm];
+\tikzstyle{red}=[circle ,top color =white , bottom color = processred!20 ,draw, processred , text=blue , minimum width =1 cm];
+\tikzstyle{green}=[circle ,top color =white , bottom color = processgreen!20 ,draw, processgreen , text=blue , minimum width =1 cm];
+
+	\node[blue] (A) {$A$};
+	\node[blue] (B) [below right = of A] {$B$};
+	\node[blue] (C) [above right = of B] {$C$};
+	\node[blue] (D) [below right = of B] {$D$};
+	\node[blue] (E) [below left = of B] {$E$};
+	
+	\path (A) edge node[above] {$1$} (B);
+	\path (A) edge node[above] {$2$} (C);
+	\path (A) edge node[left] {$3$} (E);
+	\path (B) edge node[left] {$4$} (C);
+	\path (B) edge node[left] {$5$} (E);
+	\path (B) edge node[above] {$6$} (D);
+	\path (C) edge node[right] {$7$} (D);
+	\path (E) edge node[below] {$8$} (D);
+	\end{tikzpicture}  
+\end{center}
+
+
+\noindent \textbf{Your work for the algorithms will be the next two pages.}
+
+\newpage
+\begin{enumerate}[label=(\alph*)]
+\subsection{Standard 7: Kruskal's Algorithm}
+\item Adjust the figure below to display your edge weights (\textbf{which must be the same as the edge weights you assigned at the start of the problem}), replacing 0 with digits of your choice. Then use Kruskal's algorithm \emph{as defined in the lecture notes} to compute the MST\@. For your answer you must give the order in which Kruskal's algorithm adds the edges to the MST\@.  \textbf{For each edge added to the MST, clearly indicate both the edge and its weight.} You do not need to specify the state of the algorithm during its execution (i.e.\ we do not need to see the state of the disjoint sets data structure in your answer).
+
+\begin{center}
+\begin {tikzpicture}[semithick]
+\tikzstyle{blue}=[circle ,top color =white , bottom color = processblue!20 ,draw,processblue , text=blue , minimum width =1 cm];
+\tikzstyle{red}=[circle ,top color =white , bottom color = processred!20 ,draw, processred , text=blue , minimum width =1 cm];
+\tikzstyle{green}=[circle ,top color =white , bottom color = processgreen!20 ,draw, processgreen , text=blue , minimum width =1 cm];
+
+	\node[blue] (A) {$A$};
+	\node[blue] (B) [below right = of A] {$B$};
+	\node[blue] (C) [above right = of B] {$C$};
+	\node[blue] (D) [below right = of B] {$D$};
+	\node[blue] (E) [below left = of B] {$E$};
+	
+	\path (A) edge node[above] {$1$} (B);
+	\path (A) edge node[above] {$2$} (C);
+	\path (A) edge node[left] {$3$} (E);
+	\path (B) edge node[left] {$4$} (C);
+	\path (B) edge node[left] {$5$} (E);
+	\path (B) edge node[above] {$6$} (D);
+	\path (C) edge node[right] {$7$} (D);
+	\path (E) edge node[below] {$8$} (D);
+	\end{tikzpicture}  
+\end{center}
+
+\begin{proof}[Answer]
+Add (A, B), of weight 1.
+Add (A, C), of weight 2.
+Add (A, E), of weight 3. 
+Skip (B, C).
+Skip (B, E).
+Add (B, D), of weight 6.
+Done. 
+Total weight: 12.
+\end{proof}
+
+
+
+
+
+
+
+\newpage
+\subsection{Standard 8: Prim's Algorithm}
+\item Adjust the figure below to display your edge weights (\textbf{which must be the same as the edge weights you assigned at the start of the problem}), replacing 0 with digits of your choice. Then use Prim's algorithm \emph{as defined in the lecture notes} to compute the MST\@. For your answer you must (i) clearly specify the source vertex, and (ii) give the order in which Prim's algorithm adds the edges to the MST\@.  \textbf{For each edge added to the MST, clearly indicate both the edge and its weight.} You do not need to specify the state of the algorithm during its execution (i.e.\ we do not need to see the state of the disjoint sets data structure in your answer).
+
+\begin{center}
+\begin {tikzpicture}[semithick]
+\tikzstyle{blue}=[circle ,top color =white , bottom color = processblue!20 ,draw,processblue , text=blue , minimum width =1 cm];
+\tikzstyle{red}=[circle ,top color =white , bottom color = processred!20 ,draw, processred , text=blue , minimum width =1 cm];
+\tikzstyle{green}=[circle ,top color =white , bottom color = processgreen!20 ,draw, processgreen , text=blue , minimum width =1 cm];
+
+	\node[blue] (A) {$A$};
+	\node[blue] (B) [below right = of A] {$B$};
+	\node[blue] (C) [above right = of B] {$C$};
+	\node[blue] (D) [below right = of B] {$D$};
+	\node[blue] (E) [below left = of B] {$E$};
+	
+	\path (A) edge node[above] {$1$} (B);
+	\path (A) edge node[above] {$2$} (C);
+	\path (A) edge node[left] {$3$} (E);
+	\path (B) edge node[left] {$4$} (C);
+	\path (B) edge node[left] {$5$} (E);
+	\path (B) edge node[above] {$6$} (D);
+	\path (C) edge node[right] {$7$} (D);
+	\path (E) edge node[below] {$8$} (D);
+	\end{tikzpicture}  
+\end{center}
+
+\begin{proof}[Answer]
+Let the source vertex be E.
+Then, add (A, E) with weight 3.
+Add (A, B) with weight 1.
+Add (A, C) with weight 2.
+Add (B, D) with weight 6.
+Total weight: 12.
+\end{proof}
+
+\end{enumerate}
+\end{required}
+\end{document} % NOTHING AFTER THIS LINE IS PART OF THE DOCUMENT
+
+
+
